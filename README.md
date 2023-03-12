@@ -6,5 +6,6 @@ Este github será direcionado a armazenar as atividades e demais exercícios pro
 Pedro Thomazelli Ferreira
 
 # Links Importantes
+<li><a href = "AlgoritmosGeneticos"> Pasta com experimentos;</a></li>
 <li><a href = "experimento A.01 - busca aleatoria.ipynb"> Experimento 1;</a></li>
 <li><a href = "experimento A.02 - busca em grade.ipynb"> Experimento 2;</a></li>
