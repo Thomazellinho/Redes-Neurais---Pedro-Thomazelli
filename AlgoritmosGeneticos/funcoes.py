@@ -1,5 +1,8 @@
 import random
 
+#############################################################################
+#                                genes                                      #
+#############################################################################
 
 def gene_cb ():
     """ Gerar um gene válido para o problema apresentado
@@ -199,3 +202,138 @@ def funcao_objetivo_pop_cb(populacao):
         fobj = funcao_objetivo_cb(individuo)
         fitness.append(fobj)
     return fitness
+
+###################################################################################
+#                                      senha                                      #
+###################################################################################
+
+def funcao_objetivo_pop_senha(populacao, senha_verdadeira):
+    """Computa a funcao objetivo de uma populaçao no problema da senha.
+    
+    Args:
+        populacao: lista com todos os individuos da população
+        senha_verdadeira: a senha que você está tentando descobrir
+    Returns:
+        Lista contendo os valores da métrica de distância entre senhas.
+    """
+    resultado = []
+
+    for individuo in populacao:
+        resultado.append(funcao_objetivo_senha(individuo, senha_verdadeira))
+
+    return resultado
+
+def funcao_objetivo_senha(individuo, senha_verdadeira):
+    ''' Computa a funcao objetivo de um individuo no problema da senha
+    
+    Args:
+        individuo: lista contendo as letras da senha
+        senha_verdadeira: a senha a ser descoberta
+        
+    Returns:
+        a "distância" entre a senha proposta e a verdadeira, sendo medida letra a letra. 
+        Quanto maior mais distante a letra do certo, maior a distância.
+    '''
+    diferenca = 0
+    
+    for letra_candidato, letra_oficial in zip(individuo, senha_verdadeira):
+        diferenca = diferenca + abs(ord(letra_candidato) - ord(letra_oficial))
+        
+    return diferenca
+
+def populacao_inicial_senha(tamanho, tamanho_senha, letras):
+    ''' Cria a populacao inicial no problema da senha
+    
+    Args:
+        tamanho: tamanho da populacao
+        tamanho_senha: inteiro representando o tamanho da senha
+        letras: letras possíveis de serem sorteadas
+        
+    Returns:
+        lista com todos os indivíduos do problema da senha
+    '''
+    
+    populacao = []
+    for n in range(tamanho):
+        populacao.append(individuo_senha(tamanho_senha, letras))
+    return populacao
+
+def selecao_torneio_min(populacao, fitness, tamanho_torneio=3):
+    ''' faz a seleção de uma populaçao por meio de um torneio
+    
+    Obs: aqui, só funciona para problemas de minimização.
+    
+    Args:
+        populacao: população do problema
+        fitness: lista com os valores de fitness dos individuos da populacao
+        tamanho_torneio: quantidade de individuos que brigam entre si
+        
+    Returns:
+        individuos selecionados: lista com os individuos selecionados com mesmo
+        tamanho do argumento 'populacao'
+    '''
+    
+    selecionados = []
+    
+    #associando cada individuo com seu valor de fitness
+    par_populacao_fitness = list(zip(populacao, fitness))
+    
+    #começando os jogos!!!
+    for _ in range(len(populacao)):
+        combatentes = random.sample(par_populacao_fitness, tamanho_torneio)
+        
+        minimo_fitness = float("inf") #assim que se escreve 'infinito' em Pyhton
+        
+        for par_individuo_fitness in combatentes:
+            individuo = par_individuo_fitness[0]
+            fit = par_individuo_fitness[1]
+            
+            #busca-se o individuo de menor fitness
+            if fit < minimo_fitness:
+                selecionado = individuo
+                minimo_fitness = fit
+                
+        selecionados.append(selecionado)
+        
+    return selecionados
+        
+def mutacao_senha(individuo, letras):
+    ''' realiza a mutação de um gene no problema da senha.
+    
+    Args:
+        individuo: uma lista representando um individuo no problema da senha
+        letras: letras possiveis de serem sorteadas
+        
+    Return:
+        uma senha (individuo) com um "gene" mutado
+    '''
+    
+    gene = random.randint(0, len(individuo) - 1)
+    individuo[gene] = gene_letra(letras)
+    return individuo
+
+def individuo_senha(tamanho_senha, letras):
+    """Cria um candidato para o problema da senha
+    Args:
+      tamanho_senha: inteiro representando o tamanho da senha.
+      letras: letras possíveis de serem sorteadas.
+    Return:
+      Lista com n letras
+    """
+
+    candidato = []
+
+    for n in range(tamanho_senha):
+        candidato.append(gene_letra(letras))
+
+    return candidato
+
+def gene_letra(letras):
+    """Sorteia uma letra.
+    Args:
+      letras: letras possíveis de serem sorteadas.
+    Return:
+      Retorna uma letra dentro das possíveis de serem sorteadas.
+    """
+    letra = random.choice(letras)
+    return letra
