@@ -1,114 +1,109 @@
 import random
 
-#############################################################################
-#                                genes                                      #
-#############################################################################
+###############################################################################
+#                                   Suporte                                   #
+##############################################################################+
 
-def gene_cb ():
-    """ Gerar um gene válido para o problema apresentado
-    
-    Return:
-        Valor 0 ou 1.
+
+# NOVIDADE
+def distancia_entre_dois_pontos(a, b):
+    """Computa a distância Euclidiana entre dois pontos em R^2
+
+    Args:
+      a: lista contendo as coordenadas x e y de um ponto.
+      b: lista contendo as coordenadas x e y de um ponto.
+
+    Returns:
+      Distância entre as coordenadas dos pontos `a` e `b`.
     """
-    lista = [0,1]
+
+    x1 = a[0]
+    x2 = b[0]
+    y1 = a[1]
+    y2 = b[1]
+
+    dist = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** (1 / 2)
+
+    return dist
+
+
+# NOVIDADE
+def cria_cidades(n):
+    """Cria um dicionário aleatório de cidades com suas posições (x,y).
+
+    Args:
+      n: inteiro positivo
+        Número de cidades que serão visitadas pelo caixeiro.
+
+    Returns:
+      Dicionário contendo o nome das cidades como chaves e a coordenada no plano
+      cartesiano das cidades como valores.
+    """
+
+    cidades = {}
+
+    for i in range(n):
+        cidades[f"Cidade {i}"] = (random.random(), random.random())
+
+    return cidades
+
+
+###############################################################################
+#                                    Genes                                    #
+###############################################################################
+
+
+def gene_cb():
+    """Gera um gene válido para o problema das caixas binárias
+
+    Return:
+      Um valor zero ou um.
+    """
+    lista = [0, 1]
     gene = random.choice(lista)
     return gene
 
-def gene_cnb (valor_max_caixa):
-    ''' Gerar um gene válido para o problema apresentado, agora variando de 0 a 100.
-    
+
+def gene_cnb(valor_max_caixa):
+    """Gera um gene válido para o problema das caixas não-binárias
+
     Args:
-        valor_max_caixa: valor máximo que a caixa pode assumir.
-        
+      valor_max_caixa: número inteiro representando o maior valor possível que
+      pode existir dentro de uma caixa.
+
     Return:
-        valor de 0 a 100 (inclusive).
-    '''
+      Um valor entre zero a `valor_max_caixa` (inclusive).
+    """
     gene = random.randint(0, valor_max_caixa)
     return gene
 
-def individuo_cnb(numero_genes, valor_max_caixa):
-    """ Gera um individuo válido para o problema.
-    
+
+def gene_letra(letras):
+    """Sorteia uma letra.
+
     Args:
-        numero_genes: número de genes na lista que representa o indivíduo
-        valor_max_caixa: valor máximo que a caixa pode assumir
-    
+      letras: letras possíveis de serem sorteadas.
+
     Return:
-        Uma lista representando um indivíduo válido para o problemada CNB
+      Retorna uma letra dentro das possíveis de serem sorteadas.
     """
-    individuo = []
-    for _ in range(numero_genes):
-        gene = gene_cnb(valor_max_caixa)
-        individuo.append(gene)
-    return individuo
+    letra = random.choice(letras)
+    return letra
 
-def populacao_cnb(tamanho_populacao, numero_genes, valor_max_caixa):
-    '''Cria uma população de indivíduos para o problema das caixas não-binárias
-    
-    Args:
-        tamanho_populacao: numero de individuos
-        numero_genes: número de genes na lista, representando o indivíduo
-        valor_max_caixa: valor máximo que a caixa pode assumir
-    
-    Return:
-        Uma lista com cad aitem representando um indivíduo
-    '''
-    
-    populacao = []
-    for _ in range(tamanho_populacao):
-        individuo = individuo_cnb(numero_genes, valor_max_caixa)
-        populacao.append(individuo)
-    return populacao
 
-def funcao_objetivo_cnb(individuo):
-    ''' calcula o fitness do individuo para o problema das cnb.
-    
-    Args:
-        individuo: lista que representa uma individuo
-        
-    Return:
-        valor representando o fitness do individuo
-    '''
-    fitness = sum(individuo)
-    return fitness
+###############################################################################
+#                                  Indivíduos                                 #
+###############################################################################
 
-def funcao_objetivo_pop_cnb(populacao):
-    '''calcula o fitness da população completa
-    
-    Args:
-        populacao: lista com todos os individuos
-        
-    Return:
-        lista com o fitness de cada individuo em ordem
-    '''
-    fitness_pop = []
-    for individuo in populacao:
-        fitness_ind = funcao_objetivo_cnb(individuo)
-        fitness_pop.append(fitness_ind)
-    return fitness_pop
 
-def mutacao_cnb(individuo, valor_max_caixa):
-    ''' faz a mutação
-    
-    Args:
-        individuo: individuo que deve sofrer a mutaçao
-        valor_max_caixa: valor máximo que a caixa pode assumir
-        
-    Return:
-        individuo mutado
-    '''
-    gene_a_ser_mutado = random.randint(0, len(individuo) - 1)
-    individuo[gene_a_ser_mutado] = gene_cnb(valor_max_caixa)
-    return individuo
-    
 def individuo_cb(n):
-    """ Gerar um indivíduo para o problema apresentado.
-    
+    """Gera um individuo para o problema das caixas binárias.
+
     Args:
-        n: número de genes do indivíduo.
-    
+      n: número de genes do indivíduo.
+
     Return:
-        lista com "n" genes, com valor 0 ou 1.
+       Uma lista com n genes. Cada gene é um valor zero ou um.
     """
     individuo = []
     for i in range(n):
@@ -116,207 +111,32 @@ def individuo_cb(n):
         individuo.append(gene)
     return individuo
 
-def populacao_cb(tamanho, n):
-    '''Cria uma população no problema das caixas binárias.
-    
-    Args: 
-        Tamanho: da população
-        n: número de genes
-        
-    Return:
-        Lista na qual cada item é um indivíduo, sendo esse uma lista com n genes'''
-    populacao = []
-    for _ in range (tamanho):
-        populacao.append(individuo_cb(n))
-    return populacao
 
+def individuo_cnb(n_genes, valor_max_caixa):
+    """Gera um individuo para o problema das caixas não-binárias.
 
-def selecao_roleta_max(populacao, fitness):
-    '''Seleciona indivíduos de uma população usando o método da roda. (Funciona apena para problemas de maximização
-    
     Args:
-        populacao: lista com todos os indivíduos que serão selecionados
-        fitness: lista com o valor da função objetivo dos inviduos da populacao
-    
-    Return:
-        População de indivíduos selecionados.
-    '''
-    
-    populacao_selecionada = random.choices(populacao, weights = fitness, k = len(populacao))
-    return populacao_selecionada
+      n_genes: número de genes do indivíduo.
+      valor_max_caixa: maior número inteiro possível dentro de uma caixa
 
-def cruzamento_ponto_simples(mae, pai):
-    ''' Operador de cruzamento de ponto simples.
-    
-    Args:
-        pai: uma lista representando um indivíduo
-        mãe: uma lista representando um indivíduo
-    
     Return:
-        Duas listas, cada uma representando um filho dos pais que foram colocados como argumento
-        
-    '''
-    ponto_de_corte = random.randint(1, len(pai) - 1)
-    filho1 = pai[:ponto_de_corte] + mae[ponto_de_corte:]
-    filho2 = mae[:ponto_de_corte] + pai[ponto_de_corte:]
-    
-    return filho1, filho2
-
-def mutacao_cb(individuo):
-    '''Realiza a mutação de um gene no problema das caixas binárias
-    
-    Args:
-        indivíduo: uma lista representando um indivíduo no problema das caixas binárias
-        
-    Return:
-        Um indivíduo com o gene mutado.
-    
-    '''
-    gene_a_ser_mutado = random.randint(0, len(individuo)-1)
-    individuo[gene_a_ser_mutado] = gene_cb()
+       Uma lista com n genes. Cada gene é um valor entre zero e
+       `valor_max_caixa`.
+    """
+    individuo = []
+    for i in range(n_genes):
+        gene = gene_cnb(valor_max_caixa)
+        individuo.append(gene)
     return individuo
 
-def funcao_objetivo_cb(individuo):
-    """ Computa a função objetivo no problema das cb.
-    
-    Args:
-        indivíduo: lista contendo os genes da cb.
-    
-    Return:
-        Um valor que representa as somas
-    """
-    return sum(individuo) 
-
-def funcao_objetivo_pop_cb(populacao):
-    ''' Calcula a função objetivo para todos os membros de uma população.
-    
-    Args:
-        populacao: lista com todos os individuos da populacao
-    
-    Return:
-        lista de valores representando a fitness de cada individuo da popualçao
-        
-    ''' 
-    fitness = []
-    for individuo in populacao:
-        fobj = funcao_objetivo_cb(individuo)
-        fitness.append(fobj)
-    return fitness
-
-###################################################################################
-#                                      senha                                      #
-###################################################################################
-
-def funcao_objetivo_pop_senha(populacao, senha_verdadeira):
-    """Computa a funcao objetivo de uma populaçao no problema da senha.
-    
-    Args:
-        populacao: lista com todos os individuos da população
-        senha_verdadeira: a senha que você está tentando descobrir
-    Returns:
-        Lista contendo os valores da métrica de distância entre senhas.
-    """
-    resultado = []
-
-    for individuo in populacao:
-        resultado.append(funcao_objetivo_senha(individuo, senha_verdadeira))
-
-    return resultado
-
-def funcao_objetivo_senha(individuo, senha_verdadeira):
-    ''' Computa a funcao objetivo de um individuo no problema da senha
-    
-    Args:
-        individuo: lista contendo as letras da senha
-        senha_verdadeira: a senha a ser descoberta
-        
-    Returns:
-        a "distância" entre a senha proposta e a verdadeira, sendo medida letra a letra. 
-        Quanto maior mais distante a letra do certo, maior a distância.
-    '''
-    diferenca = 0
-    
-    for letra_candidato, letra_oficial in zip(individuo, senha_verdadeira):
-        diferenca = diferenca + abs(ord(letra_candidato) - ord(letra_oficial))
-        
-    return diferenca
-
-def populacao_inicial_senha(tamanho, tamanho_senha, letras):
-    ''' Cria a populacao inicial no problema da senha
-    
-    Args:
-        tamanho: tamanho da populacao
-        tamanho_senha: inteiro representando o tamanho da senha
-        letras: letras possíveis de serem sorteadas
-        
-    Returns:
-        lista com todos os indivíduos do problema da senha
-    '''
-    
-    populacao = []
-    for n in range(tamanho):
-        populacao.append(individuo_senha(tamanho_senha, letras))
-    return populacao
-
-def selecao_torneio_min(populacao, fitness, tamanho_torneio=3):
-    ''' faz a seleção de uma populaçao por meio de um torneio
-    
-    Obs: aqui, só funciona para problemas de minimização.
-    
-    Args:
-        populacao: população do problema
-        fitness: lista com os valores de fitness dos individuos da populacao
-        tamanho_torneio: quantidade de individuos que brigam entre si
-        
-    Returns:
-        individuos selecionados: lista com os individuos selecionados com mesmo
-        tamanho do argumento 'populacao'
-    '''
-    
-    selecionados = []
-    
-    #associando cada individuo com seu valor de fitness
-    par_populacao_fitness = list(zip(populacao, fitness))
-    
-    #começando os jogos!!!
-    for _ in range(len(populacao)):
-        combatentes = random.sample(par_populacao_fitness, tamanho_torneio)
-        
-        minimo_fitness = float("inf") #assim que se escreve 'infinito' em Pyhton
-        
-        for par_individuo_fitness in combatentes:
-            individuo = par_individuo_fitness[0]
-            fit = par_individuo_fitness[1]
-            
-            #busca-se o individuo de menor fitness
-            if fit < minimo_fitness:
-                selecionado = individuo
-                minimo_fitness = fit
-                
-        selecionados.append(selecionado)
-        
-    return selecionados
-        
-def mutacao_senha(individuo, letras):
-    ''' realiza a mutação de um gene no problema da senha.
-    
-    Args:
-        individuo: uma lista representando um individuo no problema da senha
-        letras: letras possiveis de serem sorteadas
-        
-    Return:
-        uma senha (individuo) com um "gene" mutado
-    '''
-    
-    gene = random.randint(0, len(individuo) - 1)
-    individuo[gene] = gene_letra(letras)
-    return individuo
 
 def individuo_senha(tamanho_senha, letras):
     """Cria um candidato para o problema da senha
+
     Args:
       tamanho_senha: inteiro representando o tamanho da senha.
       letras: letras possíveis de serem sorteadas.
+
     Return:
       Lista com n letras
     """
@@ -328,19 +148,472 @@ def individuo_senha(tamanho_senha, letras):
 
     return candidato
 
-def gene_letra(letras):
-    """Sorteia uma letra.
-    Args:
-      letras: letras possíveis de serem sorteadas.
-    Return:
-      Retorna uma letra dentro das possíveis de serem sorteadas.
-    """
-    letra = random.choice(letras)
-    return letra
 
-### Senha variável
+# NOVIDADE
+def individuo_cv(cidades):
+    """Sorteia um caminho possível no problema do caixeiro viajante
+
+    Args:
+      cidades:
+        Dicionário onde as chaves são os nomes das cidades e os valores são as
+        coordenadas das cidades.
+
+    Return:
+      Retorna uma lista de nomes de cidades formando um caminho onde visitamos
+      cada cidade apenas uma vez.
+    """
+    nomes = list(cidades.keys())
+    random.shuffle(nomes)
+    return nomes
+
+
+###############################################################################
+#                                  População                                  #
+###############################################################################
+
+
+def populacao_cb(tamanho, n):
+    """Cria uma população no problema das caixas binárias.
+
+    Args:
+      tamanho: tamanho da população.
+      n: número de genes do indivíduo.
+
+    Returns:
+      Uma lista onde cada item é um indiviuo. Um individuo é uma lista com `n`
+      genes.
+    """
+    populacao = []
+    for _ in range(tamanho):
+        populacao.append(individuo_cb(n))
+    return populacao
+
+
+def populacao_cnb(tamanho, n_genes, valor_max_caixa):
+    """Cria uma população no problema das caixas não-binárias.
+
+    Args:
+      tamanho: tamanho da população.
+      n_genes: número de genes do indivíduo.
+      valor_max_caixa: maior número inteiro possível dentro de uma caixa
+
+    Returns:
+      Uma lista onde cada item é um indiviuo. Um individuo é uma lista com
+      `n_genes` genes.
+    """
+    populacao = []
+    for _ in range(tamanho):
+        populacao.append(individuo_cnb(n_genes, valor_max_caixa))
+    return populacao
+
+
+def populacao_inicial_senha(tamanho, tamanho_senha, letras):
+    """Cria população inicial no problema da senha
+
+    Args
+      tamanho: tamanho da população.
+      tamanho_senha: inteiro representando o tamanho da senha.
+      letras: letras possíveis de serem sorteadas.
+
+    Returns:
+      Lista com todos os indivíduos da população no problema da senha.
+    """
+    populacao = []
+    for _ in range(tamanho):
+        populacao.append(individuo_senha(tamanho_senha, letras))
+    return populacao
+
+
+# NOVIDADE
+def populacao_inicial_cv(tamanho, cidades):
+    """Cria população inicial no problema do caixeiro viajante.
+
+    Args
+      tamanho:
+        Tamanho da população.
+      cidades:
+        Dicionário onde as chaves são os nomes das cidades e os valores são as
+        coordenadas das cidades.
+
+    Returns:
+      Lista com todos os indivíduos da população no problema do caixeiro
+      viajante.
+    """
+    populacao = []
+    for _ in range(tamanho):
+        populacao.append(individuo_cv(cidades))
+    return populacao
+
+
+###############################################################################
+#                                   Seleção                                   #
+###############################################################################
+
+
+def selecao_roleta_max(populacao, fitness):
+    """Seleciona individuos de uma população usando o método da roleta.
+
+    Nota: apenas funciona para problemas de maximização.
+
+    Args:
+      populacao: lista com todos os individuos da população
+      fitness: lista com o valor da funcao objetivo dos individuos da população
+
+    Returns:
+      População dos indivíduos selecionados.
+    """
+    populacao_selecionada = random.choices(
+        populacao, weights=fitness, k=len(populacao)
+    )
+    return populacao_selecionada
+
+
+def selecao_torneio_min(populacao, fitness, tamanho_torneio=3):
+    """Faz a seleção de uma população usando torneio.
+
+    Nota: da forma que está implementada, só funciona em problemas de
+    minimização.
+
+    Args:
+      populacao: população do problema
+      fitness: lista com os valores de fitness dos individuos da população
+      tamanho_torneio: quantidade de invidiuos que batalham entre si
+
+    Returns:
+      Individuos selecionados. Lista com os individuos selecionados com mesmo
+      tamanho do argumento `populacao`.
+    """
+    selecionados = []
+
+    # criamos essa variável para associar cada individuo com seu valor de fitness
+    par_populacao_fitness = list(zip(populacao, fitness))
+
+    # vamos fazer len(populacao) torneios! Que comecem os jogos!
+    for _ in range(len(populacao)):
+        combatentes = random.sample(par_populacao_fitness, tamanho_torneio)
+
+        # é assim que se escreve infinito em python
+        minimo_fitness = float("inf")
+
+        for par_individuo_fitness in combatentes:
+            individuo = par_individuo_fitness[0]
+            fit = par_individuo_fitness[1]
+
+            # queremos o individuo de menor fitness
+            if fit < minimo_fitness:
+                selecionado = individuo
+                minimo_fitness = fit
+
+        selecionados.append(selecionado)
+
+    return selecionados
+
+
+###############################################################################
+#                                  Cruzamento                                 #
+###############################################################################
+
+
+def cruzamento_ponto_simples(pai, mae):
+    """Operador de cruzamento de ponto simples.
+
+    Args:
+      pai: uma lista representando um individuo
+      mae : uma lista representando um individuo
+
+    Returns:
+      Duas listas, sendo que cada uma representa um filho dos pais que foram os
+      argumentos.
+    """
+    ponto_de_corte = random.randint(1, len(pai) - 1)
+
+    filho1 = pai[:ponto_de_corte] + mae[ponto_de_corte:]
+    filho2 = mae[:ponto_de_corte] + pai[ponto_de_corte:]
+
+    return filho1, filho2
+
+
+# NOVIDADE
+def cruzamento_ordenado(pai, mae):
+    """Operador de cruzamento ordenado.
+
+    Neste cruzamento, os filhos mantém os mesmos genes que seus pais tinham,
+    porém em uma outra ordem. Trata-se de um tipo de cruzamento útil para
+    problemas onde a ordem dos genes é importante e não podemos alterar os genes
+    em si. É um cruzamento que pode ser usado no problema do caixeiro viajante.
+
+    Ver pág. 37 do livro do Wirsansky.
+
+    Args:
+      pai: uma lista representando um individuo
+      mae : uma lista representando um individuo
+
+    Returns:
+      Duas listas, sendo que cada uma representa um filho dos pais que foram os
+      argumentos. Estas listas mantém os genes originais dos pais, porém altera
+      a ordem deles
+    """
+    corte1 = random.randint(0, len(pai) - 2)
+    corte2 = random.randint(corte1 + 1, len(pai) - 1)
+    
+    filho1 = pai[corte1:corte2]
+    for gene in mae:
+        if gene not in filho1:
+            filho1.append(gene)
+            
+    filho2 = pai[corte1:corte2]
+    for gene in pai:
+        if gene not in filho2:
+            filho2.append(gene)
+            
+    return filho1, filho2
+
+###############################################################################
+#                                   Mutação                                   #
+###############################################################################
+
+
+def mutacao_cb(individuo):
+    """Realiza a mutação de um gene no problema das caixas binárias
+
+    Args:
+      individuo: uma lista representado um individuo no problema das caixas
+      binárias
+
+    Return:
+      Um individuo com um gene mutado.
+    """
+    gene_a_ser_mutado = random.randint(0, len(individuo) - 1)
+    individuo[gene_a_ser_mutado] = gene_cb()
+    return individuo
+
+
+def mutacao_cnb(individuo, valor_max_caixa):
+    """Realiza a mutação de um gene no problema das caixas não-binárias
+
+    Args:
+      individuo:
+        uma lista representado um individuo no problema das caixas não-binárias
+      valor_max_caixa:
+        maior número inteiro possível dentro de uma caixa
+
+    Return:
+      Um individuo com um gene mutado.
+    """
+    gene_a_ser_mutado = random.randint(0, len(individuo) - 1)
+    individuo[gene_a_ser_mutado] = gene_cnb(valor_max_caixa)
+    return individuo
+
+
+def mutacao_senha(individuo, letras):
+    """Realiza a mutação de um gene no problema da senha.
+
+    Args:
+      individuo: uma lista representado um individuo no problema da senha
+      letras: letras possíveis de serem sorteadas.
+
+    Return:
+      Um individuo (senha) com um gene mutado.
+    """
+    gene = random.randint(0, len(individuo) - 1)
+    individuo[gene] = gene_letra(letras)
+    return individuo
+
+
+# NOVIDADE
+def mutacao_de_troca(individuo):
+    """Troca o valor de dois genes.
+
+    Args:
+      individuo: uma lista representado um individuo.
+
+    Return:
+      O indivíduo recebido como argumento, porém com dois dos seus genes
+      trocados de posição.
+    """
+    indices = list(range(len(individuo)))
+    lista_sorteada = random.sample(indices,k=2)
+    indice1 = lista_sorteada[0]
+    indice2 = lista_sorteada[1]
+    
+    gene1 = individuo[indice1]
+    gene2 = individuo[indice2]
+    
+    individuo[indice1] = gene2
+    individuo[indice2] = gene1
+    
+    individuo[indice1], individuo[indice2] = individuo[indice2], individuo[indice1]
+    
+    return individuo
+
+###############################################################################
+#                         Função objetivo - indivíduos                        #
+###############################################################################
+
+
+def funcao_objetivo_cb(individuo):
+    """Computa a função objetivo no problema das caixas binárias.
+
+    Args:
+      individiuo: lista contendo os genes das caixas binárias
+
+    Return:
+      Um valor representando a soma dos genes do individuo.
+    """
+    return sum(individuo)
+
+
+def funcao_objetivo_cnb(individuo):
+    """Computa a função objetivo no problema das caixas não-binárias.
+
+    Args:
+      individiuo: lista contendo os genes das caixas não-binárias
+
+    Return:
+      Um valor representando a soma dos genes do individuo.
+    """
+    return sum(individuo)
+
+
+def funcao_objetivo_senha(individuo, senha_verdadeira):
+    """Computa a funcao objetivo de um individuo no problema da senha
+
+    Args:
+      individiuo: lista contendo as letras da senha
+      senha_verdadeira: a senha que você está tentando descobrir
+
+    Returns:
+      A "distância" entre a senha proposta e a senha verdadeira. Essa distância
+      é medida letra por letra. Quanto mais distante uma letra for da que
+      deveria ser, maior é essa distância.
+    """
+    diferenca = 0
+
+    for letra_candidato, letra_oficial in zip(individuo, senha_verdadeira):
+        diferenca = diferenca + abs(ord(letra_candidato) - ord(letra_oficial))
+
+    return diferenca
+
+
+# NOVIDADE
+def funcao_objetivo_cv(individuo, cidades):
+    """Computa a funcao objetivo de um individuo no problema do caixeiro viajante.
+
+    Args:
+      individiuo:
+        Lista contendo a ordem das cidades que serão visitadas
+      cidades:
+        Dicionário onde as chaves são os nomes das cidades e os valores são as
+        coordenadas das cidades.
+
+    Returns:
+      A distância percorrida pelo caixeiro seguindo o caminho contido no
+      `individuo`. Lembrando que após percorrer todas as cidades em ordem, o
+      caixeiro retorna para a cidade original de onde começou sua viagem.
+    """
+
+    distancia = 0
+
+    for posicao in range(len(individuo) - 1):
+        
+        partida = cidades[individuo[posicao]]
+        chegada = cidades[individuo[posicao + 1]]
+        
+        percurso = distancia_entre_dois_pontos(partida,chegada)
+        distancia = distancia + percurso
+        
+        
+    partida = cidades[individuo[-1]]
+    chegada = cidades[individuo[0]]
+    
+    percurso = distancia_entre_dois_pontos(partida,chegada)
+    distancia = distancia + percurso
+        
+    return distancia
+
+
+###############################################################################
+#                         Função objetivo - população                         #
+###############################################################################
+
+
+def funcao_objetivo_pop_cb(populacao):
+    """Calcula a funcao objetivo para todos os membros de uma população
+
+    Args:
+      populacao: lista com todos os individuos da população
+
+    Return:
+      Lista de valores represestando a fitness de cada individuo da população.
+    """
+    fitness = []
+    for individuo in populacao:
+        fobj = funcao_objetivo_cb(individuo)
+        fitness.append(fobj)
+    return fitness
+
+
+def funcao_objetivo_pop_cnb(populacao):
+    """Calcula a funcao objetivo para todos os membros de uma população
+
+    Args:
+      populacao: lista com todos os individuos da população
+
+    Return:
+      Lista de valores represestando a fitness de cada individuo da população.
+    """
+    fitness = []
+    for individuo in populacao:
+        fobj = funcao_objetivo_cnb(individuo)
+        fitness.append(fobj)
+    return fitness
+
 
 def funcao_objetivo_pop_senha(populacao, senha_verdadeira):
+    """Computa a funcao objetivo de uma populaçao no problema da senha.
+
+    Args:
+      populacao: lista com todos os individuos da população
+      senha_verdadeira: a senha que você está tentando descobrir
+
+    Returns:
+      Lista contendo os valores da métrica de distância entre senhas.
+    """
+    resultado = []
+
+    for individuo in populacao:
+        resultado.append(funcao_objetivo_senha(individuo, senha_verdadeira))
+
+    return resultado
+
+
+# NOVIDADE
+def funcao_objetivo_pop_cv(populacao, cidades):
+    """Computa a funcao objetivo de uma população no problema do caixeiro viajante.
+
+    Args:
+      populacao:
+        Lista com todos os inviduos da população
+      cidades:
+        Dicionário onde as chaves são os nomes das cidades e os valores são as
+        coordenadas das cidades.
+
+    Returns:
+      Lista contendo a distância percorrida pelo caixeiro para todos os
+      indivíduos da população.
+    """
+
+    resultado = []
+    for individuo in populacao:
+        resultado.append(funcao_objetivo_cv(individuo, cidades))
+
+    return resultado
+
+########################################
+#          Senha variável              #
+########################################
+
+def funcao_objetivo_pop_senha_sv(populacao, senha_verdadeira, peso_penalidade):
     """Computa a funcao objetivo de uma populaçao no problema da senha.
     
     Args:
@@ -352,16 +625,17 @@ def funcao_objetivo_pop_senha(populacao, senha_verdadeira):
     resultado = []
 
     for individuo in populacao:
-        resultado.append(funcao_objetivo_senha(individuo, senha_verdadeira))
+        resultado.append(funcao_objetivo_senha_sv(individuo, senha_verdadeira, peso_penalidade))
 
     return resultado
 
-def funcao_objetivo_senha(individuo, senha_verdadeira):
+def funcao_objetivo_senha_sv(individuo, senha_verdadeira, peso_penalidade):
     ''' Computa a funcao objetivo de um individuo no problema da senha
     
     Args:
         individuo: lista contendo as letras da senha
         senha_verdadeira: a senha a ser descoberta
+        peso_penalidade: valor do erro adicionado por erro
         
     Returns:
         a "distância" entre a senha proposta e a verdadeira, sendo medida letra a letra. 
@@ -372,9 +646,12 @@ def funcao_objetivo_senha(individuo, senha_verdadeira):
     for letra_candidato, letra_oficial in zip(individuo, senha_verdadeira):
         diferenca = diferenca + abs(ord(letra_candidato) - ord(letra_oficial))
         
+    diferenca_tamanho = abs(len(individuo) - len(senha_verdadeira))
+    diferenca += peso_penalidade*diferenca_tamanho
+        
     return diferenca
 
-def populacao_inicial_senha(tamanho, tamanho_senha, letras):
+def populacao_inicial_senha_sv(tamanho, tamanho_senha_max, letras):
     ''' Cria a populacao inicial no problema da senha
     
     Args:
@@ -388,10 +665,10 @@ def populacao_inicial_senha(tamanho, tamanho_senha, letras):
     
     populacao = []
     for n in range(tamanho):
-        populacao.append(individuo_senha(tamanho_senha, letras))
+        populacao.append(individuo_senha_sv(tamanho_senha_max, letras))
     return populacao
 
-def selecao_torneio_min(populacao, fitness, tamanho_torneio=3):
+def selecao_torneio_min_sv(populacao, fitness, tamanho_torneio=3):
     ''' faz a seleção de uma populaçao por meio de um torneio
     
     Obs: aqui, só funciona para problemas de minimização.
@@ -430,7 +707,7 @@ def selecao_torneio_min(populacao, fitness, tamanho_torneio=3):
         
     return selecionados
         
-def mutacao_senha(individuo, letras):
+def mutacao_senha_sv(individuo, letras, tamanho_senha_max):
     ''' realiza a mutação de um gene no problema da senha.
     
     Args:
@@ -440,12 +717,20 @@ def mutacao_senha(individuo, letras):
     Return:
         uma senha (individuo) com um "gene" mutado
     '''
-    
-    gene = random.randint(0, len(individuo) - 1)
-    individuo[gene] = gene_letra_sv(letras)
-    return individuo
+    if random.random() < 0.5:
+        gene = random.randint(0, len(individuo) - 1)
+        individuo[gene] = gene_letra_sv(letras)
+        return individuo
+    else:
+        novo_tamanho = random.randint(3, tamanho_senha_max)
+        if novo_tamanho < len(individuo):
+            return individuo[:novo_tamanho]
+        else:
+            for _ in range(novo_tamanho - len(individuo)):
+                individuo.append(gene_letra_sv(letras))
+            return individuo
 
-def individuo_senha_sv(tamanho_senha, letras):
+def individuo_senha_sv(tamanho_senha_max, letras):
     """Cria um candidato para o problema da senha
     Args:
       tamanho_senha: inteiro representando o tamanho da senha.
@@ -455,7 +740,7 @@ def individuo_senha_sv(tamanho_senha, letras):
     """
 
     candidato = []
-
+    tamanho_senha = random.randint(3, tamanho_senha_max)
     for n in range(tamanho_senha):
         candidato.append(gene_letra_sv(letras))
 
@@ -470,3 +755,23 @@ def gene_letra_sv(letras):
     """
     letra = random.choice(letras)
     return letra
+
+def cruzamento_ponto_simples_sv(mae, pai):
+    ''' Operador de cruzamento de ponto simples.
+    
+    Args:
+        pai: uma lista representando um indivíduo
+        mãe: uma lista representando um indivíduo
+    
+    Return:
+        Duas listas, cada uma representando um filho dos pais que foram colocados como argumento
+        
+    '''
+    if len(pai) < len(mae):     
+        ponto_de_corte = random.randint(1, len(pai) - 1)
+    else:
+        ponto_de_corte = random.randint(1, len(mae) - 1)
+    filho1 = pai[:ponto_de_corte] + mae[ponto_de_corte:]
+    filho2 = mae[:ponto_de_corte] + pai[ponto_de_corte:]
+    
+    return filho1, filho2
