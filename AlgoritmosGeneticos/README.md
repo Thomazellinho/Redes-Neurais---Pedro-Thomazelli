@@ -20,4 +20,4 @@
 
 <p align = "justify"> O terceiro problema consiste na execução de um algoritmo genético para a solução do problema das caixa binárias. Essencialmente, introduz cruzamento e mutação ao que foi apresentado anteriormente. </p>
 
-<a href = "experimento A.03 - algoritmo genético.ipynb"> Experimento A.03</a>
+<a href = "experimento A.03 - algoritmo genetico.ipynb"> Experimento A.03</a>
