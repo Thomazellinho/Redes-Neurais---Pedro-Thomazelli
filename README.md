@@ -12,7 +12,7 @@ Pedro Thomazelli Ferreira
 ## Como se guiar pelo Git?
 
 <p align = 'justify'> Para se guiar pelo Git, o principal local a se observar é: 
-<li><a href = 'Links Importantes'> Links Importantes </a></li>
+  <li> <b> Links Importantes </b> </li>
 Neles estão contidos os links direcionando aos experimentos. </p>
 
 <p align = 'justify'> Os principais arquivos presentes aqui são nos formatos:
