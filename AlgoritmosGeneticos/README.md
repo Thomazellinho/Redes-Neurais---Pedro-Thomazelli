@@ -1,6 +1,6 @@
 # Experimentos de otimização e algoritmos genéticos
 
-<p align = "justify"> Esta pasta será destinada ao armazenamento dos experimentos com algoritmos genéticos. Esses consistem em algoritmos que se baseiam em conceitos biológicos, buscando a resolução de um problema. </p>
+<p align = "justify"> Esta pasta será destinada ao armazenamento dos experimentos com algoritmos genéticos. Esses consistem em algoritmos que se baseiam em conceitos biológicos, buscando a resolução de um problema. São algoritmos probabilísticos, contudo apresentam convergência, havendo parâmetros e combinações que buscam resolver o problema. </p>
 
 # Experimentos
 
