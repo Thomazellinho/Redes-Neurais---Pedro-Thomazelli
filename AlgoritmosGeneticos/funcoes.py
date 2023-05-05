@@ -858,3 +858,47 @@ def cruzamento_ponto_simples_sv(mae, pai):
     filho2 = mae[:ponto_de_corte] + pai[ponto_de_corte:]
     
     return filho1, filho2
+
+###############################################################################
+#                                   Caixeiro infinito                         #
+###############################################################################
+
+def selecao_torneio_max_ci(populacao, fitness, tamanho_torneio=3):
+    """Faz a seleção de uma população usando torneio.
+
+    Nota: da forma que está implementada, só funciona em problemas de
+    minimização.
+
+    Args:
+      populacao: população do problema
+      fitness: lista com os valores de fitness dos individuos da população
+      tamanho_torneio: quantidade de invidiuos que batalham entre si
+
+    Returns:
+      Individuos selecionados. Lista com os individuos selecionados com mesmo
+      tamanho do argumento `populacao`.
+    """
+    selecionados = []
+
+    # criamos essa variável para associar cada individuo com seu valor de fitness
+    par_populacao_fitness = list(zip(populacao, fitness))
+
+    # vamos fazer len(populacao) torneios! Que comecem os jogos!
+    for _ in range(len(populacao)):
+        combatentes = random.sample(par_populacao_fitness, tamanho_torneio)
+
+        # é assim que se escreve infinito em python
+        maximo_fitness = -float("inf")
+
+        for par_individuo_fitness in combatentes:
+            individuo = par_individuo_fitness[0]
+            fit = par_individuo_fitness[1]
+
+            # queremos o individuo de menor fitness
+            if fit > maximo_fitness:
+                selecionado = individuo
+                minimo_fitness = fit
+
+        selecionados.append(selecionado)
+
+    return selecionados
