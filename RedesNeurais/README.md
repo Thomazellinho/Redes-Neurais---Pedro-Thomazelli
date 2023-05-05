@@ -17,3 +17,5 @@ Esta pasta será destinada ao armazenamento dos experimentos com Redes Neurais. 
 ## Experimento R.03
 
 <p align = 'justify'> Nesse experimento, tentamos entender melhor o funcionamento de operações matemáticas dentro das classes, além de progenitores e operadores mãe. Também foi feito o grafo do problema. </p>
+
+<a href = "experimento R.03 - construindo um grafo automaticamente.ipynb"> Experimento R.03</a>
